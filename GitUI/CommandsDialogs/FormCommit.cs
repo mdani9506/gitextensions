@@ -1529,7 +1529,43 @@ namespace GitUI.CommandsDialogs
             if (Message.Text != message)
             {
                 Message.SelectAll();
-                Message.SelectedText = message;
+
+                // do regex
+
+                string leftStr = message;
+                string midleStr = "";
+                string rightStr = "";
+                try
+                {
+                    var regexSeparation = message.Split("[[");
+                    if (regexSeparation.Length != 2)
+                    {
+                        throw new();
+                    }
+
+                    leftStr = regexSeparation[0];
+                    regexSeparation = regexSeparation[1].Split("]]");
+                    if (regexSeparation.Length != 2)
+                    {
+                        throw new();
+                    }
+
+                    string regstring = regexSeparation[0];
+                    rightStr = regexSeparation[1];
+
+                    Regex regex = new(regstring);
+                    MatchCollection matches = regex.Matches(branchNameLabel.Text);
+
+                    if (matches.Count > 0)
+                    {
+                        midleStr = matches[0].Value;
+                    }
+                }
+                catch
+                {
+                }
+
+                Message.SelectedText = leftStr + midleStr + rightStr;
             }
         }
 
