@@ -13,8 +13,9 @@ namespace GitCommands
         public string Name { get; set; }
         public string Text { get; set; }
         public Image? Icon { get; set; }
+        public bool Regex { get; set; }
 
-        public CommitTemplateItem(string name, string text, Image icon)
+        public CommitTemplateItem(string name, string text, Image icon, bool regex)
         {
             Name = name;
             Text = text;
@@ -26,18 +27,27 @@ namespace GitCommands
             Name = string.Empty;
             Text = string.Empty;
             Icon = null;
+            Regex = false;
         }
 
         private CommitTemplateItem(SerializationInfo info, StreamingContext context)
         {
             Name = (string)info.GetValue("Name", typeof(string));
             Text = (string)info.GetValue("Text", typeof(string));
+            try
+            {
+                Regex = (bool)info.GetValue("Regex", typeof(bool));
+            }
+            catch
+            {
+            }
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("Name", Name);
             info.AddValue("Text", Text);
+            info.AddValue("Regex", Regex);
         }
 
         public static void SaveToSettings(CommitTemplateItem[] items)

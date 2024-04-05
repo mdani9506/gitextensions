@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reactive.Joins;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Runtime.InteropServices;
@@ -1466,8 +1467,32 @@ namespace GitUI.CommandsDialogs
         /// replace the Message.Text in an undo-able way
         /// </summary>
         /// <param name="message">the new message</param>
-        private void ReplaceMessage(string message)
+        private void ReplaceMessage(string message, bool regexEnabled)
         {
+            if (regexEnabled)
+            {
+                try
+                {
+                    string regexfinderPattern = @"\[\[(.*?)\]\]";
+                    Match regexMatch = Regex.Match(message, regexfinderPattern);
+
+                    if (regexMatch.Success)
+                    {
+                        Regex regex = new(regexMatch.Groups[1].Value);
+                        MatchCollection matches = regex.Matches(branchNameLabel.Text);
+
+                        if (matches.Count > 0)
+                        {
+                            string generatedName = matches[0].Value;
+                            message = message.Replace(regexMatch.Groups[0].Value, generatedName);
+                        }
+                    }
+                }
+                catch
+                {
+                }
+            }
+
             if (Message.Text != message)
             {
                 Message.SelectAll();
@@ -2305,7 +2330,7 @@ namespace GitUI.CommandsDialogs
         {
             if (e.ClickedItem.Tag is not null)
             {
-                ReplaceMessage(((string)e.ClickedItem.Tag).Trim());
+                ReplaceMessage(((string)e.ClickedItem.Tag).Trim(), false);
             }
         }
 
@@ -2385,7 +2410,7 @@ namespace GitUI.CommandsDialogs
                 }
             }
 
-            ReplaceMessage(sb.ToString().TrimEnd());
+            ReplaceMessage(sb.ToString().TrimEnd(), false);
         }
 
         private void AddFileToGitIgnoreToolStripMenuItemClick(object sender, EventArgs e)
@@ -3099,7 +3124,7 @@ namespace GitUI.CommandsDialogs
                     {
                         try
                         {
-                            ReplaceMessage(item.Text);
+                            ReplaceMessage(item.Text, item.Regex);
                             Message.Focus();
                         }
                         catch
@@ -3187,7 +3212,7 @@ namespace GitUI.CommandsDialogs
         {
             if (string.IsNullOrEmpty(Message.Text) && Amend.Checked)
             {
-                ReplaceMessage(Module.GetPreviousCommitMessages(1).FirstOrDefault()?.Trim());
+                ReplaceMessage(Module.GetPreviousCommitMessages(1).FirstOrDefault()?.Trim(), false);
             }
 
             if (AppSettings.CommitAndPushForcedWhenAmend)

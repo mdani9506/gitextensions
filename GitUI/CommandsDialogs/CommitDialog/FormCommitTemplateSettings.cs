@@ -104,6 +104,7 @@ namespace GitUI.CommandsDialogs.CommitDialog
         {
             _NO_TRANSLATE_textCommitTemplateText.Text = _commitTemplates[_NO_TRANSLATE_comboBoxCommitTemplates.SelectedIndex].Text;
             _NO_TRANSLATE_textBoxCommitTemplateName.Text = _commitTemplates[_NO_TRANSLATE_comboBoxCommitTemplates.SelectedIndex].Name;
+            _NO_TRANSLATE_checkBoxCommitTemplateRegex.Checked = _commitTemplates[_NO_TRANSLATE_comboBoxCommitTemplates.SelectedIndex].Regex;
         }
 
         private void RefreshLineInListBox(int line)
@@ -120,6 +121,11 @@ namespace GitUI.CommandsDialogs.CommitDialog
             }
 
             _NO_TRANSLATE_comboBoxCommitTemplates.Items[line] = $"{line + 1} : {comboBoxText}";
+        }
+
+        private void _NO_TRANSLATE_checkBoxCommitTemplateRegex_CheckedChanged(object sender, EventArgs e)
+        {
+            _commitTemplates[_NO_TRANSLATE_comboBoxCommitTemplates.SelectedIndex].Regex = _NO_TRANSLATE_checkBoxCommitTemplateRegex.Checked;
         }
     }
 }

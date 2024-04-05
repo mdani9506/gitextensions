@@ -237,7 +237,7 @@ namespace JiraCommitHintPlugin
                 _currentMessages = currentMessages;
                 foreach (var message in _currentMessages)
                 {
-                    e.GitUICommands.AddCommitTemplate(message.Title, () => message.Text, Icon);
+                    e.GitUICommands.AddCommitTemplate(message.Title, () => message.Text, Icon, false);
                 }
             });
         }

@@ -40,6 +40,8 @@
             this.labelCommitTemplateName = new System.Windows.Forms.Label();
             this._NO_TRANSLATE_textCommitTemplateText = new System.Windows.Forms.TextBox();
             this._NO_TRANSLATE_textBoxCommitTemplateName = new System.Windows.Forms.TextBox();
+            this._NO_TRANSLATE_checkBoxCommitTemplateRegex = new System.Windows.Forms.CheckBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.labelUseIndent = new System.Windows.Forms.Label();
@@ -155,13 +157,16 @@
             this.tableLayoutPanel5.Controls.Add(this.labelCommitTemplateName, 0, 1);
             this.tableLayoutPanel5.Controls.Add(this._NO_TRANSLATE_textCommitTemplateText, 1, 2);
             this.tableLayoutPanel5.Controls.Add(this._NO_TRANSLATE_textBoxCommitTemplateName, 1, 1);
+            this.tableLayoutPanel5.Controls.Add(this._NO_TRANSLATE_checkBoxCommitTemplateRegex, 0, 3);
+            this.tableLayoutPanel5.Controls.Add(this.label1, 1, 3);
             this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
-            this.tableLayoutPanel5.RowCount = 3;
+            this.tableLayoutPanel5.RowCount = 4;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel5.Size = new System.Drawing.Size(678, 321);
             this.tableLayoutPanel5.TabIndex = 1;
             // 
@@ -194,7 +199,7 @@
             this.labelCommitTemplateName.AutoSize = true;
             this.labelCommitTemplateName.Location = new System.Drawing.Point(3, 33);
             this.labelCommitTemplateName.Name = "labelCommitTemplateName";
-            this.labelCommitTemplateName.Size = new System.Drawing.Size(87, 13);
+            this.labelCommitTemplateName.Size = new System.Drawing.Size(99, 13);
             this.labelCommitTemplateName.TabIndex = 7;
             this.labelCommitTemplateName.Text = "Name:";
             // 
@@ -203,22 +208,44 @@
             this._NO_TRANSLATE_textCommitTemplateText.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this._NO_TRANSLATE_textCommitTemplateText.Location = new System.Drawing.Point(96, 56);
+            this._NO_TRANSLATE_textCommitTemplateText.Location = new System.Drawing.Point(108, 56);
             this._NO_TRANSLATE_textCommitTemplateText.Multiline = true;
             this._NO_TRANSLATE_textCommitTemplateText.Name = "_NO_TRANSLATE_textCommitTemplateText";
             this._NO_TRANSLATE_textCommitTemplateText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this._NO_TRANSLATE_textCommitTemplateText.Size = new System.Drawing.Size(579, 262);
+            this._NO_TRANSLATE_textCommitTemplateText.Size = new System.Drawing.Size(567, 239);
             this._NO_TRANSLATE_textCommitTemplateText.TabIndex = 2;
             this._NO_TRANSLATE_textCommitTemplateText.TextChanged += new System.EventHandler(this.textCommitTemplateText_TextChanged);
             // 
             // _NO_TRANSLATE_textBoxCommitTemplateName
             // 
             this._NO_TRANSLATE_textBoxCommitTemplateName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this._NO_TRANSLATE_textBoxCommitTemplateName.Location = new System.Drawing.Point(96, 30);
+            this._NO_TRANSLATE_textBoxCommitTemplateName.Location = new System.Drawing.Point(108, 30);
             this._NO_TRANSLATE_textBoxCommitTemplateName.Name = "_NO_TRANSLATE_textBoxCommitTemplateName";
-            this._NO_TRANSLATE_textBoxCommitTemplateName.Size = new System.Drawing.Size(579, 20);
+            this._NO_TRANSLATE_textBoxCommitTemplateName.Size = new System.Drawing.Size(567, 20);
             this._NO_TRANSLATE_textBoxCommitTemplateName.TabIndex = 1;
             this._NO_TRANSLATE_textBoxCommitTemplateName.TextChanged += new System.EventHandler(this.textBoxCommitTemplateName_TextChanged);
+            // 
+            // _NO_TRANSLATE_checkBoxCommitTemplateRegex
+            // 
+            this._NO_TRANSLATE_checkBoxCommitTemplateRegex.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this._NO_TRANSLATE_checkBoxCommitTemplateRegex.AutoSize = true;
+            this._NO_TRANSLATE_checkBoxCommitTemplateRegex.Location = new System.Drawing.Point(3, 301);
+            this._NO_TRANSLATE_checkBoxCommitTemplateRegex.Name = "_NO_TRANSLATE_checkBoxCommitTemplateRegex";
+            this._NO_TRANSLATE_checkBoxCommitTemplateRegex.Size = new System.Drawing.Size(99, 17);
+            this._NO_TRANSLATE_checkBoxCommitTemplateRegex.TabIndex = 11;
+            this._NO_TRANSLATE_checkBoxCommitTemplateRegex.Text = "Regex Enabled";
+            this._NO_TRANSLATE_checkBoxCommitTemplateRegex.UseVisualStyleBackColor = true;
+            this._NO_TRANSLATE_checkBoxCommitTemplateRegex.CheckedChanged += new System.EventHandler(this._NO_TRANSLATE_checkBoxCommitTemplateRegex_CheckedChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(108, 304);
+            this.label1.Margin = new System.Windows.Forms.Padding(3, 6, 3, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(85, 13);
+            this.label1.TabIndex = 8;
+            this.label1.Text = "Git branch regex";
             // 
             // tabPage2
             // 
@@ -433,5 +460,7 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.CheckBox _NO_TRANSLATE_checkBoxCommitTemplateRegex;
+        private System.Windows.Forms.Label label1;
     }
 }

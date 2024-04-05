@@ -39,7 +39,7 @@ namespace GitUIPluginInterfaces
 
         bool StartSettingsDialog(Type pageType);
         bool StartSettingsDialog(IGitPlugin gitPlugin);
-        void AddCommitTemplate(string key, Func<string> addingText, Image icon);
+        void AddCommitTemplate(string key, Func<string> addingText, Image icon, bool regex);
         void RemoveCommitTemplate(string key);
     }
 }
