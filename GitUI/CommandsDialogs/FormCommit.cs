@@ -181,6 +181,7 @@ namespace GitUI.CommandsDialogs
         [CanBeNull] private IReadOnlyList<GitItemStatus> _currentSelection;
         private int _alreadyLoadedTemplatesCount = -1;
         private EventHandler _branchNameLabelOnClick;
+        private CommitTemplateItem _lastUsedTemplate;
 
         private CommitKind CommitKind
         {
@@ -323,6 +324,8 @@ namespace GitUI.CommandsDialogs
             splitRight.Panel2.BackColor = OtherColors.PanelBorderColor;
 
             BackColor = OtherColors.BackgroundColor;
+
+            LoadCommitTemplates();
 
             WorkaroundPaddingIncreaseBug();
 
@@ -3086,76 +3089,84 @@ namespace GitUI.CommandsDialogs
             }
 
             return;
+        }
 
-            void LoadCommitTemplates()
+        private void LoadCommitTemplates()
+        {
+            commitTemplatesToolStripMenuItem.DropDownItems.Clear();
+
+            // Add registered templates
+            foreach (var item in _commitTemplateManager.RegisteredTemplates)
             {
-                commitTemplatesToolStripMenuItem.DropDownItems.Clear();
+                CreateToolStripItem(item);
+            }
 
-                // Add registered templates
-                foreach (var item in _commitTemplateManager.RegisteredTemplates)
+            AddSeparator();
+
+            // Add templates from settings
+            foreach (var item in CommitTemplateItem.LoadFromSettings() ?? Array.Empty<CommitTemplateItem>())
+            {
+                CreateToolStripItem(item);
+            }
+
+            AddSeparator();
+
+            // Add a settings item
+            AddSettingsItem();
+
+            return;
+
+            void CreateToolStripItem(CommitTemplateItem item)
+            {
+                if (string.IsNullOrEmpty(item.Name))
                 {
-                    CreateToolStripItem(item);
+                    return;
                 }
 
-                AddSeparator();
-
-                // Add templates from settings
-                foreach (var item in CommitTemplateItem.LoadFromSettings() ?? Array.Empty<CommitTemplateItem>())
+                var toolStripItem = new ToolStripMenuItem(item.Name, item.Icon);
+                toolStripItem.Click += delegate
                 {
-                    CreateToolStripItem(item);
-                }
-
-                AddSeparator();
-
-                // Add a settings item
-                AddSettingsItem();
-
-                return;
-
-                void CreateToolStripItem(CommitTemplateItem item)
-                {
-                    if (string.IsNullOrEmpty(item.Name))
+                    try
                     {
-                        return;
+                        ReplaceMessage(item.Text, item.Regex);
+                        LastCommitMessageTemplate.Text = "Template:" + item.Text;
+                        _lastUsedTemplate = item;
+                        Message.Focus();
+                    }
+                    catch
+                    {
+                    }
+                };
+                commitTemplatesToolStripMenuItem.DropDownItems.Add(toolStripItem);
+
+                if (_lastUsedTemplate == null)
+                {
+                    LastCommitMessageTemplate.Text = "Template:" + item.Text;
+                    _lastUsedTemplate = item;
+                }
+            }
+
+            void AddSeparator()
+            {
+                if (commitTemplatesToolStripMenuItem.DropDownItems.Count != 0)
+                {
+                    commitTemplatesToolStripMenuItem.DropDownItems.Add(new ToolStripSeparator());
+                }
+            }
+
+            void AddSettingsItem()
+            {
+                var settingsItem = new ToolStripMenuItem(_commitMessageSettings.Text, Images.Settings);
+                settingsItem.Click += delegate
+                {
+                    using (var frm = new FormCommitTemplateSettings())
+                    {
+                        frm.ShowDialog(this);
                     }
 
-                    var toolStripItem = new ToolStripMenuItem(item.Name, item.Icon);
-                    toolStripItem.Click += delegate
-                    {
-                        try
-                        {
-                            ReplaceMessage(item.Text, item.Regex);
-                            Message.Focus();
-                        }
-                        catch
-                        {
-                        }
-                    };
-                    commitTemplatesToolStripMenuItem.DropDownItems.Add(toolStripItem);
-                }
-
-                void AddSeparator()
-                {
-                    if (commitTemplatesToolStripMenuItem.DropDownItems.Count != 0)
-                    {
-                        commitTemplatesToolStripMenuItem.DropDownItems.Add(new ToolStripSeparator());
-                    }
-                }
-
-                void AddSettingsItem()
-                {
-                    var settingsItem = new ToolStripMenuItem(_commitMessageSettings.Text, Images.Settings);
-                    settingsItem.Click += delegate
-                    {
-                        using (var frm = new FormCommitTemplateSettings())
-                        {
-                            frm.ShowDialog(this);
-                        }
-
-                        _shouldReloadCommitTemplates = true;
-                    };
-                    commitTemplatesToolStripMenuItem.DropDownItems.Add(settingsItem);
-                }
+                    _shouldReloadCommitTemplates = true;
+                };
+                commitTemplatesToolStripMenuItem.DropDownItems.Add(settingsItem);
             }
         }
 
@@ -3254,6 +3265,21 @@ namespace GitUI.CommandsDialogs
             }
 
             ThreadHelper.JoinableTaskFactory.RunAsync(() => UpdateBranchNameDisplayAsync());
+        }
+
+        private void LastCommitMessageTemplate_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (_lastUsedTemplate != null)
+                {
+                    ReplaceMessage(_lastUsedTemplate.Text, _lastUsedTemplate.Regex);
+                    Message.Focus();
+                }
+            }
+            catch
+            {
+            }
         }
 
         private void Message_Enter(object sender, EventArgs e)

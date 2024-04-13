@@ -143,6 +143,7 @@ namespace GitUI.CommandsDialogs
             this.toolStripGpgKeyTextBox = new System.Windows.Forms.ToolStripTextBox();
             this.commitTemplatesToolStripMenuItem = new System.Windows.Forms.ToolStripDropDownButton();
             this.createBranchToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.LastCommitMessageTemplate = new System.Windows.Forms.ToolStripButton();
             this.commitStatusStrip = new System.Windows.Forms.StatusStrip();
             this.commitAuthorStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusBranchIcon = new System.Windows.Forms.ToolStripStatusLabel();
@@ -1201,7 +1202,9 @@ namespace GitUI.CommandsDialogs
             this.commitMessageToolStripMenuItem,
             this.toolStripMenuItem3,
             this.commitTemplatesToolStripMenuItem,
+            this.LastCommitMessageTemplate,
             this.createBranchToolStripButton});
+
             this.toolbarCommit.Location = new System.Drawing.Point(177, 0);
             this.toolbarCommit.Name = "toolbarCommit";
             this.toolbarCommit.Padding = new System.Windows.Forms.Padding(1, 1, 2, 1);
@@ -1367,6 +1370,15 @@ namespace GitUI.CommandsDialogs
             this.createBranchToolStripButton.Size = new System.Drawing.Size(101, 20);
             this.createBranchToolStripButton.Text = "Create &branch";
             this.createBranchToolStripButton.Click += new System.EventHandler(this.createBranchToolStripButton_Click);
+            // 
+            // LastCommitMessageTemplate
+            // 
+            //this.LastCommitMessageTemplate.Image = global::GitUI.Properties.Images.BranchCreate;
+            this.LastCommitMessageTemplate.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.LastCommitMessageTemplate.Name = "LastCommitMessageTemplate";
+            this.LastCommitMessageTemplate.Size = new System.Drawing.Size(101, 20);
+            this.LastCommitMessageTemplate.Text = "Template:";
+            this.LastCommitMessageTemplate.Click += new System.EventHandler(this.LastCommitMessageTemplate_Click);
             // 
             // commitStatusStrip
             // 
@@ -1573,6 +1585,7 @@ namespace GitUI.CommandsDialogs
         private ToolStripMenuItem viewFileHistoryToolStripItem;
         private ToolStripEx toolbarCommit;
         private ToolStripDropDownButton commitMessageToolStripMenuItem;
+        private ToolStripButton LastCommitMessageTemplate;
         private ToolStripDropDownButton toolStripMenuItem3;
         private ToolStripMenuItem closeDialogAfterEachCommitToolStripMenuItem;
         private ToolStripMenuItem closeDialogAfterAllFilesCommittedToolStripMenuItem;
